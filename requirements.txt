@@ -3,3 +3,4 @@ uvicorn
 ormsgpack
 asyncio
 aio-pika
+pydantic[email]

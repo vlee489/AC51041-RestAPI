@@ -11,6 +11,8 @@ from aio_pika import Message, connect
 from aio_pika.abc import (AbstractChannel, AbstractConnection, AbstractIncomingMessage, AbstractQueue)
 import ormsgpack
 
+from .response import Response
+
 
 class Client:
     connection: AbstractConnection
@@ -51,7 +53,7 @@ class Client:
         response = ormsgpack.unpackb(message.body)
         future.set_result(response)
 
-    async def call(self, routing_key: str, payload: dict) -> dict:
+    async def call(self, routing_key: str, payload: dict) -> Response:
         """
         Send RPC Call
         :param routing_key: routing key for RabbitMQ
@@ -72,4 +74,4 @@ class Client:
             ),
             routing_key=routing_key
         )
-        return dict(await future)
+        return Response(await future)
