@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.get("/", response_model=UserResponse)
 async def login(request: Request, security_profile: Session = Depends(get_session_key)):
-    """User Login"""
+    """User Profile"""
     response: Response = await request.app.mq.call("user", {"user_id": security_profile.user_id})
     if response.status == State.VALID:
         return response.properties['user']

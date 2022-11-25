@@ -11,6 +11,6 @@ header_authorization = APIKeyHeader(name="Authorization", auto_error=True)
 async def get_session_key(request: Request, api_key_header: str = Security(header_authorization)) -> Optional[Session]:
     response = await request.app.mq.call("session", {"session_id": api_key_header})
     if response.status == State.VALID:
-        return Session(response.properties["session"])
+        return Session(response.properties["session"], api_key_header)
     else:
         raise HTTPException(status_code=401, detail="Not Authorised")

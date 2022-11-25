@@ -57,9 +57,9 @@ def create_app():
 
     # Routes
     new_app.include_router(
-        login_router,
-        prefix="/login",
-        tags=["login"]
+        session_router,
+        prefix="/session",
+        tags=["session"]
     )
 
     # Routes
@@ -79,8 +79,8 @@ def create_app():
             routes=new_app.routes,
             tags=[
                 {
-                    "name": "login",
-                    "description": "User login"
+                    "name": "Session",
+                    "description": "User session management"
                 },
             ]
         )
