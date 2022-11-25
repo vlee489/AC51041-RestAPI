@@ -62,6 +62,13 @@ def create_app():
         tags=["login"]
     )
 
+    # Routes
+    new_app.include_router(
+        user_router,
+        prefix="/user",
+        tags=["user"]
+    )
+
     def custom_openapi():
         if new_app.openapi_schema:
             return new_app.openapi_schema
