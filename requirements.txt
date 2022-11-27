@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-ormsgpack
+msgpack
 asyncio
 aio-pika
 pydantic[email]

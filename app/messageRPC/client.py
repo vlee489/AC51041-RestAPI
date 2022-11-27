@@ -9,7 +9,7 @@ import logging
 from typing import MutableMapping
 from aio_pika import Message, connect
 from aio_pika.abc import (AbstractChannel, AbstractConnection, AbstractIncomingMessage, AbstractQueue)
-import ormsgpack
+from app.functions.packer import unpack, pack
 
 from .response import Response
 
@@ -50,7 +50,7 @@ class Client:
             logging.error(f"Bad RPC Response: {message!r}")
             return
         future: asyncio.Future = self.futures.pop(message.correlation_id)
-        response = ormsgpack.unpackb(message.body)
+        response = unpack(message.body)
         future.set_result(response)
 
     async def call(self, routing_key: str, payload: dict) -> Response:
@@ -63,7 +63,7 @@ class Client:
         correlation_id = str(uuid.uuid4())
         future = self.loop.create_future()
         self.futures[correlation_id] = future
-        payload = ormsgpack.packb(payload)
+        payload = pack(payload)
 
         await self.channel.default_exchange.publish(
             Message(
