@@ -14,7 +14,6 @@ services:
       - "traefik.http.routers.rest.rule=Host(`website.tld`)"
       - "traefik.http.routers.rest.entrypoints=websecure"
       - "traefik.http.routers.rest.tls.certresolver=mydnschallenge"
-      - "traefik.http.services.rest.loadbalancer.server.port=80"
 
   login:
     image: vlee489/ac51041-login
