@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/ac51041-restapi:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ac51041-restapi:latest
