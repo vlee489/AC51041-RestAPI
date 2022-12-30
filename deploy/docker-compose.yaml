@@ -1,0 +1,81 @@
+version: "3"
+
+services:
+  restapi:
+    image: vlee489/ac51041-restapi
+    container_name: devops_restapi
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .config/api.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rest.rule=Host(`website.tld`)"
+      - "traefik.http.routers.rest.entrypoints=websecure"
+      - "traefik.http.routers.rest.tls.certresolver=mydnschallenge"
+      - "traefik.http.services.rest.loadbalancer.server.port=80"
+
+  login:
+    image: vlee489/ac51041-login
+    container_name: devops_login
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - db
+      - rabbitmq
+    env_file:
+      - .config/login.env
+
+  catalogue:
+    image: vlee489/ac51041-catalogue
+    container_name: devops_catalogue
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - rabbitmq
+    env_file:
+      - .config/catalogue.env
+
+  redis:
+    image: "redis:alpine"
+    container_name: devops_redis
+    restart: unless-stopped
+
+  db:
+    restart: unless-stopped
+    image: docker.io/postgres:12.2-alpine
+    container_name: devops_db
+    env_file:
+      - .config/db.env
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+  rabbitmq:
+    restart: unless-stopped
+    image: "rabbitmq:3-management"
+    container_name: devops_rabbitmq
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: devops_traefik
+    restart: unless-stopped
+    env_file: .config/proxy.env
+    depends_on:
+      - restapi
+    command:
+      - "--api.dashboard=false"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.mydnschallenge.acme.dnschallenge=true"
+      # - "--certificatesresolvers.mydnschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.mydnschallenge.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.mydnschallenge.acme.email=security@website.tld"
+      - "--certificatesresolvers.mydnschallenge.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
