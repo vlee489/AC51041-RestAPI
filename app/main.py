@@ -69,6 +69,13 @@ def create_app():
         tags=["user"]
     )
 
+    # Routes
+    new_app.include_router(
+        film_router,
+        prefix="/film",
+        tags=["film"]
+    )
+
     def custom_openapi():
         if new_app.openapi_schema:
             return new_app.openapi_schema
