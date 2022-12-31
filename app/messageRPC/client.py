@@ -40,7 +40,7 @@ class Client:
         await self.callback_queue.consume(self.on_response)
         return self
 
-    def on_response(self, message: AbstractIncomingMessage) -> None:
+    async def on_response(self, message: AbstractIncomingMessage) -> None:
         """
         On response from RPC consumer
         :param message: Incoming message
@@ -50,6 +50,7 @@ class Client:
             logging.error(f"Bad RPC Response: {message!r}")
             return
         future: asyncio.Future = self.futures.pop(message.correlation_id)
+        await message.ack()
         response = unpack(message.body)
         future.set_result(response)
 
