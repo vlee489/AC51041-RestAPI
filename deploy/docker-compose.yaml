@@ -15,6 +15,16 @@ services:
       - "traefik.http.routers.rest.entrypoints=websecure"
       - "traefik.http.routers.rest.tls.certresolver=mydnschallenge"
 
+  webUI:
+    image: vlee489/ac51041-ui
+    container_name: devops_ui
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ui.rule=Host(`ui.tld`)"
+      - "traefik.http.routers.ui.entrypoints=websecure"
+      - "traefik.http.routers.ui.tls.certresolver=mydnschallenge"
+
   login:
     image: vlee489/ac51041-login
     container_name: devops_login
@@ -31,10 +41,22 @@ services:
     container_name: devops_catalogue
     restart: unless-stopped
     depends_on:
-      - redis
+      - rabbitmq
+    links:
       - rabbitmq
     env_file:
       - .config/catalogue.env
+
+  signer:
+    image: vlee489/ac51041-signer
+    container_name: devops_signer
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    env_file:
+      - .config/signer.env
 
   redis:
     image: "redis:alpine"

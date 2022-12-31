@@ -23,6 +23,16 @@ DEBUG=True
 MONGOURI=""  # MongoDB URI
 ```
 
+#### signer.env
+```dotenv
+DEBUG=
+MQURI=""
+BUCKETREGION=""
+BUCKETENDPOINT=""
+BUCKETKEYID=""
+BUKCETACCESSKEY=""
+```
+
 #### db.env
 ````dotenv
 POSTGRES_PASSWORD=""

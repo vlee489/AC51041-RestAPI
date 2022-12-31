@@ -62,18 +62,22 @@ def create_app():
         tags=["session"]
     )
 
-    # Routes
     new_app.include_router(
         user_router,
         prefix="/user",
         tags=["user"]
     )
 
-    # Routes
     new_app.include_router(
         film_router,
         prefix="/film",
         tags=["film"]
+    )
+
+    new_app.include_router(
+        presign_router,
+        prefix="/sign",
+        tags=["signing"]
     )
 
     def custom_openapi():

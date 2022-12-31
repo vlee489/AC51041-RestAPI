@@ -9,7 +9,7 @@ from app.functions.cdnURL import location_to_cdn
 router = APIRouter()
 
 
-@router.get("/film/id/{film_id}", response_model=FilmResponse)
+@router.get("/id/{film_id}", response_model=FilmResponse)
 async def get_film_by_id(request: Request, film_id: str, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-id", {"id": film_id})
     if response.status == State.VALID:
@@ -30,7 +30,7 @@ async def get_film_by_id(request: Request, film_id: str, security_profile: Sessi
             raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@router.get("/film/tag/{tag}", response_model=List[FilmResponse])
+@router.get("/tag/{tag}", response_model=List[FilmResponse])
 async def get_tag_film(request: Request, tag: str, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-tag", {"tag": tag})
     if response.status == State.VALID:
@@ -51,7 +51,7 @@ async def get_tag_film(request: Request, tag: str, security_profile: Session = D
             raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@router.get("/film/category/{category}", response_model=List[FilmResponse])
+@router.get("/category/{category}", response_model=List[FilmResponse])
 async def get_category_film(request: Request, category: str, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-cat", {"category": category})
     if response.status == State.VALID:
@@ -71,7 +71,7 @@ async def get_category_film(request: Request, category: str, security_profile: S
         else:
             raise HTTPException(status_code=500, detail="Internal Error")
 
-@router.get("/film/all", response_model=List[FilmResponse])
+@router.get("/all", response_model=List[FilmResponse])
 async def get_all_film(request: Request, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-all", {})
     if response.status == State.VALID:
