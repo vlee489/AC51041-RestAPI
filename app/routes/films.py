@@ -71,6 +71,28 @@ async def get_category_film(request: Request, category: str, security_profile: S
         else:
             raise HTTPException(status_code=500, detail="Internal Error")
 
+
+@router.get("/search/{query}", response_model=List[FilmResponse])
+async def search_films(request: Request, query: str, security_profile: Session = Depends(get_session_key)):
+    response: Response = await request.app.mq.call("film-search", {"query": query})
+    if response.status == State.VALID:
+        films = response.properties["films"]
+        return [{
+            "id": film["id"],
+            "name": film["name"],
+            "tags": film["tags"],
+            "categories": film["categories"],
+            "thumbnail_url": location_to_cdn(film["thumbnail_location"]),
+            "description": film["description"],
+            "tag_line": film["tag_line"]
+        } for film in films]
+    else:
+        if response.error == "NOT-FOUND":
+            return []
+        else:
+            raise HTTPException(status_code=500, detail="Internal Error")
+
+
 @router.get("/all", response_model=List[FilmResponse])
 async def get_all_film(request: Request, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-all", {})
