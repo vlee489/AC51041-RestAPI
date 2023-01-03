@@ -6,7 +6,7 @@ from app.models import Recommendation, RecommendationResponse
 
 router = APIRouter()
 
-@router.post("/", status_code=202)
+@router.post("", status_code=202)
 async def update_film_recommendation(request: Request, data: Recommendation, background_tasks: BackgroundTasks,
                                security_profile: Session = Depends(get_session_key)):
     """Update position in a film for a user"""
@@ -15,7 +15,7 @@ async def update_film_recommendation(request: Request, data: Recommendation, bac
     background_tasks.add_task(request.app.mq.call,routing_key="film-rec-update", payload=data)
     return
 
-@router.get("/", response_model=RecommendationResponse)
+@router.get("", response_model=RecommendationResponse)
 async def get_film_recommendation(request: Request, security_profile: Session = Depends(get_session_key)):
     response: Response = await request.app.mq.call("film-rec", {"user_oid": security_profile.oid})
     if response.status == State.VALID:
