@@ -80,6 +80,12 @@ def create_app():
         tags=["signing"]
     )
 
+    new_app.include_router(
+        watch_router,
+        prefix="/watch",
+        tags=["watch"]
+    )
+
     def custom_openapi():
         if new_app.openapi_schema:
             return new_app.openapi_schema

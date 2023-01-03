@@ -76,3 +76,20 @@ class Client:
             routing_key=routing_key
         )
         return Response(await future)
+
+    async def one_way_call(self, routing_key: str, payload: dict) -> None:
+        """
+        Send RPC Call with no expectation of reply
+        :param routing_key: routing key for RabbitMQ
+        :param payload: Message payload dict
+        :return: None
+        """
+        payload = pack(payload)
+        await self.channel.default_exchange.publish(
+            Message(
+                payload,
+                content_type="json/msgpack",
+            ),
+            routing_key=routing_key
+        )
+        return

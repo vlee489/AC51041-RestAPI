@@ -58,6 +58,17 @@ services:
     env_file:
       - .config/signer.env
 
+  personalisation:
+    image: vlee489/ac51041-personalisation
+    container_name: devops_personalisation
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    env_file:
+      - .config/personalisation.env
+
   redis:
     image: "redis:alpine"
     container_name: devops_redis
