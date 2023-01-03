@@ -4,3 +4,4 @@ from .user import router as user_router
 from .films import router as film_router
 from .presign import router as presign_router
 from .watch import router as watch_router
+from .recommendation import router as recommendation_router

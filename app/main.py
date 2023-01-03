@@ -86,6 +86,12 @@ def create_app():
         tags=["watch"]
     )
 
+    new_app.include_router(
+        recommendation_router,
+        prefix="/rec",
+        tags=["recommendation"]
+    )
+
     def custom_openapi():
         if new_app.openapi_schema:
             return new_app.openapi_schema
