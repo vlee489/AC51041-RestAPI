@@ -1,6 +1,6 @@
 """Routes for user login & logout"""
 from fastapi import APIRouter, Request, HTTPException, Depends
-from app.models import LoginResponse, LoginCredentials, BoolResponse
+from app.models import LoginResponse, LoginCredentials, BoolResponse, SignupCredentials
 from app.messageRPC import Response, State
 from app.security import get_session_key, Session
 
@@ -39,3 +39,16 @@ async def logout(request: Request, security_profile: Session = Depends(get_sessi
         else:
             raise HTTPException(status_code=500, detail="Internal Error")
 
+@router.post("/signup", response_model=BoolResponse)
+async def signup(request: Request, credentials: SignupCredentials):
+    """signup Login"""
+    response: Response = await request.app.mq.call("signup", credentials.dict())
+    if response.status == State.VALID:
+        return {"status": True}
+    else:
+        if response.error == "EMAIL-USED":
+            raise HTTPException(status_code=422, detail="Email Used already")
+        elif response.error == "MISSING-FIELD":
+            raise HTTPException(status_code=422, detail="Field Missing")
+        else:
+            raise HTTPException(status_code=500, detail="Internal Error")
