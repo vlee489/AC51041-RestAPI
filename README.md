@@ -3,23 +3,30 @@ Rest API for AC51041 assignment
 
 # AC51041
 Micro Services based VOD service
+*This repo also acts as the central ReadMe for this project*
 
 ## Accompanying Git Repos
 - [Login Service](https://github.com/vlee489/AC51041-Login)
 - [Film Catalogue Service](https://github.com/vlee489/AC51041-catalogue)
-- [Front End](https://github.com/vlee489/AC51041-ui)
+- [Front End Service](https://github.com/vlee489/AC51041-ui)
+- [History and Personalization Service](https://github.com/vlee489/AC51041-Personalisation)
+- [Key Pre-signing Service](https://github.com/vlee489/AC51041-signer)
 - [REST API (This repo)](https://github.com/vlee489/AC51041-RestAPI)
 
 ## Systems used
 - Docker
 - Docker Compose
-- MongoDB
+- MongoDB & Atlas Cloud Hosting
 - Postgres
 - Redis
 - Digital Ocean Spaces / AWS S3
 - RabbitMQ
 - FastAPI
 - OpenAPI / Swagger
+- Python 3.11
+- HTML/CSS/JS
+- Video.js
+- Msgpack
 - GitHub Actions (As CI)
 - Docker.io Registry
 

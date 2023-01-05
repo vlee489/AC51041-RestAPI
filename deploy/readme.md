@@ -1,5 +1,12 @@
 # Docker Compose Deployment
 
+## Deployment
+To deploy this project use an x86-64 or ARM64 (Apple Silicon/AWS Graviton/Ampere Altra) based server with
+Docker and Docker Compose setup. You'll need to forward port `443` for the reverse proxy.
+
+Make sure to edit the docker compose files to include you 2 TLDs for the RestAPI and UI along with an email for Let's Encrypt to
+notify you on.
+
 ### Env
 create the following `.env` files in the `.config/` folder for Docker Compose to use.
 
@@ -18,6 +25,12 @@ MQURI=""  # RabitMQ
 ```
 
 #### catalogue.env
+```dotenv
+DEBUG=True
+MONGOURI=""  # MongoDB URI
+```
+
+#### personalisation.env
 ```dotenv
 DEBUG=True
 MONGOURI=""  # MongoDB URI
