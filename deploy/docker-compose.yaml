@@ -11,7 +11,7 @@ services:
       - .config/api.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rest.rule=Host(`devops.vlee.me.uk`)"
+      - "traefik.http.routers.rest.rule=Host(`website.tld`)"
       - "traefik.http.routers.rest.entrypoints=websecure"
       - "traefik.http.routers.rest.tls.certresolver=mydnschallenge"
 
@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ui.rule=Host(`devui.vlee.me.uk`)"
+      - "traefik.http.routers.ui.rule=Host(`website.tld`)"
       - "traefik.http.routers.ui.entrypoints=websecure"
       - "traefik.http.routers.ui.tls.certresolver=mydnschallenge"
 
@@ -84,15 +84,15 @@ services:
       - .config/db.env
     volumes:
       - ./db:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
 
   rabbitmq:
     restart: unless-stopped
     image: "rabbitmq:3-management"
     container_name: devops_rabbitmq
-    ports:
-      - "15672:15672"
+#    ports:
+#      - "15672:15672"
 
   traefik:
     image: "traefik:v2.9"
@@ -110,7 +110,7 @@ services:
       - "--certificatesresolvers.mydnschallenge.acme.dnschallenge=true"
 #      - "--certificatesresolvers.mydnschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.mydnschallenge.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.mydnschallenge.acme.email=vlee@vlee.me.uk"
+      - "--certificatesresolvers.mydnschallenge.acme.email=security@website.tld"
       - "--certificatesresolvers.mydnschallenge.acme.storage=/letsencrypt/acme.json"
     ports:
       - "443:443"
